@@ -42,8 +42,8 @@ public void setup() {
   // Hier zou dropdown moeten komen om juiste poort te selecteren
   String portName = Serial.list()[1];
 
-  // Maak connectie -> 2000000 = vies snel
-  serialPort = new Serial(this, portName, 2000000);
+  // Maak connectie -> 115200 = vies snel
+  serialPort = new Serial(this, portName, 115200);
 
   // Lees totdat '#' wordt gezien
   serialPort.bufferUntil('#'); 
@@ -55,8 +55,11 @@ public void draw() {
 
 public void controlEvent(ControlEvent theEvent) {
   if(theEvent.controller().id() == 1) {
-    serialPort.write("255");
-    serialPort.write("25f5");
+    serialPort.write("r");
+    serialPort.write(5);
+    serialPort.write(12);
+    serialPort.write(256);
+    serialPort.write(2);
   }
 }
 
@@ -73,6 +76,7 @@ public void serialEvent(Serial myPort) {
       if(val.equals("Connect me")) {
         serialPort.clear();
         serialPort.write("Connected!");
+        println("Connected!");
         connected = true;
         delay(100);
       }
