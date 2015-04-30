@@ -1,148 +1,104 @@
-import java.util.*;
-import controlP5.*;
 import com.onformative.leap.*;
 import com.leapmotion.leap.*;
-import com.leapmotion.leap.Gesture.*;
+import com.leapmotion.leap.Gesture.*;	// state en type
+import controlP5.*;
 
+// Libs
+ControlP5 cp5;
 LeapMotionP5 leap;
-color fillColor = #FFFFFF;
-int score = 0;
-int lifes = 3;
-int curTime;
-int wait = 1000;
 
-void setup(){
-	size(1200, 800);
-	noFill();
+// Rectangles -> LED segments
+Button r1;
+Button r2;
+Button r3;
+Button r4;
+Button r5;
+Button r6;
 
-	curTime = millis();//store the current curTime
+// Finger
+Button finger;
 
-	leap = new LeapMotionP5(this);
+
+void setup() {
+	size(1800, 700, P2D);
+	leap = new LeapMotionP5(this);								// leap motion device
 	leap.enableGesture(Type.TYPE_SCREEN_TAP);
 
-	drawButtons();
+
+	cp5 = new ControlP5(this);
+
+	r1 = cp5.addButton("Led segment 1")
+    	.setValue(0)
+     	.setPosition(500,500)
+     	.setSize(200,19)
+     	.setColorBackground(color(255, 0, 0))
+     	.setColorLabel(color(255, 0, 0));
+
+     r2 = cp5.addButton("Led segment 2")
+    	.setValue(0)
+     	.setPosition(500,500)
+     	.setSize(200,19)
+     	.setColorBackground(color(255, 0, 0))
+     	.setColorLabel(color(255, 0, 0));
+
+     r3 = cp5.addButton("Led segment 3")
+    	.setValue(0)
+     	.setPosition(500,500)
+     	.setSize(200,19)
+     	.setColorBackground(color(255, 0, 0))
+     	.setColorLabel(color(255, 0, 0));
+
+     r4 = cp5.addButton("Led segment 4")
+    	.setValue(0)
+     	.setPosition(500,500)
+     	.setSize(200,19)
+     	.setColorBackground(color(255, 0, 0))
+     	.setColorLabel(color(255, 0, 0));
+
+     r5 = cp5.addButton("Led segment 5")
+    	.setValue(0)
+     	.setPosition(500,500)
+     	.setSize(200,19)
+     	.setColorBackground(color(255, 0, 0))
+     	.setColorLabel(color(255, 0, 0));
+
+     r6 = cp5.addButton("Led segment 6")
+    	.setValue(0)
+     	.setPosition(500,500)
+     	.setSize(200,19)
+     	.setColorBackground(color(255, 0, 0))
+     	.setColorLabel(color(255, 0, 0));
+     
+
+
+	finger = cp5.addButton("finger")
+    	.setValue(0)
+     	.setPosition(width * 0.5, width * 0.5)
+     	.setSize(10,10)
+     	.setColorBackground(color(0, 255, 0));
 }
 
-void draw(){
-	background(fillColor);
+void draw() {
+	background(#000000);
 
-	fill(0);
-	textFont(createFont("Verdana", 40));
-	text("Lifes: " + lifes, 100, 100);
 
-	textFont(createFont("Verdana", 40));
-	text("Score: " + score, 900, 100);
-
-	//drawButtons();
+	PVector fingerPosition = leap.getTip(leap.getFinger(0));
+	finger.setPosition(fingerPosition.x, fingerPosition.y);
 }
 
-void drawButtons(){
+public void screenTapGestureRecognized(ScreenTapGesture gesture) {
+	println("screenTapGestureRecognized");
+	// 3 states
+	// 1 -> herkennen gesturen
+	// 2 -> gesture is bezig, update
+	// 3 -> gesture stopt
 
-	// rectangles tekenen ipv controlP5 buttons (cP5 kan niet op geklikt worden met leapmotion??)
-	fill(#000000);
-	rect(200, 300, 60, 200);
-	rect(350, 300, 60, 200);
-	rect(500, 300, 60, 200);
-	rect(650, 300, 60, 200);
-	rect(800, 300, 60, 200);
-	rect(950, 300, 60, 200);
-
-	//pickRandomRectangle();
-}
-
-void pickRandomRectangle(){
-
-	if(millis() - curTime >= wait){
-    int ran = int(random(0, 6));
-    //println(ran);//if it is, do something
-
-    switch(ran) {
-  	case 1: 
-    println("case1");  // Does not execute
-    fill(#FF0000);
-    rect(200, 300, 60, 200);
-    fill(#000000);
-    rect(350, 300, 60, 200);
-	rect(500, 300, 60, 200);
-	rect(650, 300, 60, 200);
-	rect(800, 300, 60, 200);
-	rect(950, 300, 60, 200);
-    break;
-
-    case 2: 
-    println("case2");  // Does not execute
-    fill(#FF0000);
-    rect(350, 300, 60, 200);
-    fill(#000000);
-    rect(200, 300, 60, 200);
-    rect(500, 300, 60, 200);
-	rect(650, 300, 60, 200);
-	rect(800, 300, 60, 200);
-	rect(950, 300, 60, 200);
-    break;
-
-    case 3: 
-    println("case3");  // Does not execute
-    fill(#FF0000);
-    rect(500, 300, 60, 200);
-    fill(#000000);
-    rect(200, 300, 60, 200);
-	rect(350, 300, 60, 200);
-    rect(650, 300, 60, 200);
-	rect(800, 300, 60, 200);
-	rect(950, 300, 60, 200);
-    break;
-
-    case 4: 
-    println("case4");  // Does not execute
-    fill(#FF0000);
-    rect(650, 300, 60, 200);
-    fill(#000000);
-    rect(200, 300, 60, 200);
-	rect(350, 300, 60, 200);
-	rect(500, 300, 60, 200);
-	rect(800, 300, 60, 200);
-	rect(950, 300, 60, 200);
-    break;
-
-    case 5: 
-    println("case5");  // Does not execute
-    fill(#FF0000);
-    rect(800, 300, 60, 200);
-    fill(#000000);
-    rect(200, 300, 60, 200);
-	rect(350, 300, 60, 200);
-	rect(500, 300, 60, 200);
-	rect(650, 300, 60, 200);
-	rect(950, 300, 60, 200);
-    break;
-
-    case 6: 
-    println("case6");  // Does not execute
-    fill(#FF0000);
-    rect(950, 300, 60, 200);
-    fill(#000000);
-    rect(200, 300, 60, 200);
-	rect(350, 300, 60, 200);
-	rect(500, 300, 60, 200);
-	rect(650, 300, 60, 200);
-	rect(800, 300, 60, 200);
-    break;
-}
-    curTime = millis();//also update the stored time   
-  }
-}
-
-public void screenTapGestureRecognized(ScreenTapGesture gesture){
-	// START, UPDATE, STOP
-	if(gesture.state() == State.STATE_STOP){
-		fillColor = color(random(255), random(255), random(255));
-		score++;
-	}
-	else if(gesture.state() == State.STATE_UPDATE){
+	if(gesture.state() == State.STATE_STOP) {
 		//fillColor = color(random(255), random(255), random(255));
-	}
-	else if(gesture.state() == State.STATE_START){
+		r1.setColorBackground(color(random(255), random(255), random(255)));
+	} else if(gesture.state() == State.STATE_UPDATE) {
+		r1.setColorBackground(color(random(255), random(255), random(255)));
+	} else if(gesture.state() == State.STATE_START) {
 
 	}
-}	
+}
