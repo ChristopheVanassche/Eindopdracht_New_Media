@@ -13,9 +13,6 @@ const bool ShiftPWM_balanceLoad = false;
 
 #include <ShiftPWM.h>
 
-// Function prototypes (telling the compiler these functions exist).
-void printInstructions(void);
-
 void setup() {
   Serial.begin(115200);
   setupConnection();
@@ -47,9 +44,9 @@ void loop() {
     } else if (inChar == 'f') {
       randomColors();
       Serial.println("Fun Fun!#");
-    } else if (inChar == 's') {
-      ShiftPWM.SetAllRGB(0, 0, 0);
-      Serial.println("Alle LEDs uit.#");
+    } else if (inChar == 'w') {
+      ShiftPWM.SetAllHSV(297, 0, 30);
+      Serial.println("Alle LEDs wit.#");
     }
   }
 }
@@ -85,7 +82,8 @@ void randomColors() { // Update random LED to random color. Funky!
   static unsigned long previousUpdateTime;
   if (millis() - previousUpdateTime > updateDelay) {
     previousUpdateTime = millis();
-    ShiftPWM.SetHSV(random(leds), random(360), 255, 255);
+    //ShiftPWM.SetHSV(random(leds), random(360), 255, 255);
+    ShiftPWM.SetAllHSV(random(360), 255, 255);
   }
 }
 
@@ -98,6 +96,6 @@ void printInstructions() {
   Serial.println("\t\t Geef eerst LED nummber (0, 1, 2, ...)");
   Serial.println("\t\t Schrijft RGB waarden een voor een. Foutieve waarden worden auto verbeterd.");
   Serial.println("\t f Fun mode");
-  Serial.println("\t s Stop alle LEDs");
+  Serial.println("\t w Alle LEDs wit");
   Serial.println("----#");
 }
