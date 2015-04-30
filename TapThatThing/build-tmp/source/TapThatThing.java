@@ -242,12 +242,27 @@ public void screenTapGestureRecognized(ScreenTapGesture gesture) {
 	// 2 -> gesture is bezig, update
 	// 3 -> gesture stopt
 
-	if(gesture.state() == State.STATE_STOP) {
-		pickARandomLed();
-	} else if(gesture.state() == State.STATE_UPDATE) {
-		pickARandomLed();
-	} else if(gesture.state() == State.STATE_START) {
-		
+	float currY = finger.getPosition().y;
+	if(currY >= 200 && currY <= 400) {
+
+		float currX = finger.getPosition().x;
+		if(gesture.state() == State.STATE_STOP) {
+			testje(currX);
+			pickARandomLed();
+		} else if(gesture.state() == State.STATE_UPDATE) {
+			testje(currX);
+			pickARandomLed();
+		} else if(gesture.state() == State.STATE_START) {
+			
+		}
+	}
+}
+
+public void testje(float x) {
+	if(x >= 200 && x <= 300) {
+		println("eerste");
+	} else if(x >= 500 && x <= 600) {
+		println("tweede");
 	}
 }
   static public void main(String[] passedArgs) {
