@@ -37,35 +37,35 @@ void setup() {
 
      r2 = cp5.addButton("Led segment 2")
     	.setValue(0)
-     	.setPosition(500,500)
+     	.setPosition(600,500)
      	.setSize(200,19)
      	.setColorBackground(color(255, 0, 0))
      	.setColorLabel(color(255, 0, 0));
 
      r3 = cp5.addButton("Led segment 3")
     	.setValue(0)
-     	.setPosition(500,500)
+     	.setPosition(700,500)
      	.setSize(200,19)
      	.setColorBackground(color(255, 0, 0))
      	.setColorLabel(color(255, 0, 0));
 
      r4 = cp5.addButton("Led segment 4")
     	.setValue(0)
-     	.setPosition(500,500)
+     	.setPosition(800,500)
      	.setSize(200,19)
      	.setColorBackground(color(255, 0, 0))
      	.setColorLabel(color(255, 0, 0));
 
      r5 = cp5.addButton("Led segment 5")
     	.setValue(0)
-     	.setPosition(500,500)
+     	.setPosition(900,500)
      	.setSize(200,19)
      	.setColorBackground(color(255, 0, 0))
      	.setColorLabel(color(255, 0, 0));
 
      r6 = cp5.addButton("Led segment 6")
     	.setValue(0)
-     	.setPosition(500,500)
+     	.setPosition(1000,500)
      	.setSize(200,19)
      	.setColorBackground(color(255, 0, 0))
      	.setColorLabel(color(255, 0, 0));
