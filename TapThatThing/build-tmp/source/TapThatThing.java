@@ -30,6 +30,7 @@ LeapMotionP5 leap;
 
 // Rectangles -> LED segments
 Button r1;
+<<<<<<< HEAD
 Button r2;
 Button r3;
 Button r4;
@@ -92,11 +93,40 @@ public void setup() {
      
 
 
+=======
+
+// Finger
+Button finger;
+
+
+public void setup() {
+	size(1800, 700, P2D);
+	leap = new LeapMotionP5(this);								// leap motion device
+	leap.enableGesture(Type.TYPE_SCREEN_TAP);
+
+
+	cp5 = new ControlP5(this);
+
+	r1 = cp5.addButton("Led segment 1")
+    	.setValue(0)
+     	.setPosition(500,500)
+     	.setSize(200,19)
+     	.setColorBackground(color(255, 0, 0))
+     	.setColorLabel(color(255, 0, 0));
+     ;
+
+
+>>>>>>> origin/master
 	finger = cp5.addButton("finger")
     	.setValue(0)
      	.setPosition(width * 0.5f, width * 0.5f)
      	.setSize(10,10)
+<<<<<<< HEAD
      	.setColorBackground(color(0, 255, 0));
+=======
+     	.setColorBackground(color(0, 255, 0))
+     ;
+>>>>>>> origin/master
 }
 
 public void draw() {
