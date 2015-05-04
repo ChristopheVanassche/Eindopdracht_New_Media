@@ -36,13 +36,7 @@ void draw() {
 
 public void controlEvent(ControlEvent theEvent) {
   if(theEvent.controller().id() == 1) {
-    serialPort.write("w");
-    serialPort.write("r");
-    serialPort.write(5);
-    serialPort.write(255);
-    serialPort.write(0);
-    serialPort.write(0);
-
+    serialPort.write("f");
   }
 }
 

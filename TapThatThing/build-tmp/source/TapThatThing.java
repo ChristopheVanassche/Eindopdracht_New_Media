@@ -27,6 +27,7 @@ public class TapThatThing extends PApplet {
 // Libs
 ControlP5 cp5;
 LeapMotionP5 leap;
+PVector fingerPosition;
 
 // Rectangles -> LED segments
 Button r1;
@@ -42,6 +43,7 @@ Button finger;
 // Random nummer elke x aantal milliseconden (1s = 1000ms)
 int curTime;
 int wait = 5000;
+int ran = 0;
 
 //Score en levens bijhouden
 int score = 0;
@@ -111,27 +113,32 @@ public void setup() {
 	.setPosition(width * 0.5f, width * 0.5f)
 	.setSize(20,20)
 	.setColorBackground(color(0, 0, 0));
+
+	// Font globaal instellen
+	textFont(createFont("Verdana", 40));
+	fill(0);
 }
 
 public void draw() {
 	background(0xffAAAAAA);
-	PVector fingerPosition = leap.getTip(leap.getFinger(0));
+	fingerPosition = leap.getTip(leap.getFinger(0));
 	finger.setPosition(fingerPosition.x, fingerPosition.y);
 
 	// Score en levens bijhouden, moet in draw omdat die hertekend wordt.
-	fill(0);
-	textFont(createFont("Verdana", 40));
+	//fill(0);
+	//textFont(createFont("Verdana", 40));
 	text("Lifes: " + lifes, 100, 100);
 
-	fill(0);
-	textFont(createFont("Verdana", 40));
+	//fill(0);
+	//textFont(createFont("Verdana", 40));
 	text("Score: " + score, 1400, 100);
+	//delay(10);
 }
 
 public void pickARandomLed(){
 	if(millis() - curTime >= wait){
-		int ran = PApplet.parseInt(random(1, 7));
-    	println(ran); //if it is, do something
+		ran = PApplet.parseInt(random(1, 7));
+    	//println(ran); //if it is, do something
     	curTime = millis();
 
     	switch(ran) {
@@ -247,10 +254,10 @@ public void screenTapGestureRecognized(ScreenTapGesture gesture) {
 
 		float currX = finger.getPosition().x;
 		if(gesture.state() == State.STATE_STOP) {
-			testje(currX);
+			//testje(currX);
 			pickARandomLed();
 		} else if(gesture.state() == State.STATE_UPDATE) {
-			testje(currX);
+			//testje(currX);
 			pickARandomLed();
 		} else if(gesture.state() == State.STATE_START) {
 			
