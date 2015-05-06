@@ -227,10 +227,35 @@ public void screenTapGestureRecognized(ScreenTapGesture gesture) {
 
 		float currX = finger.getPosition().x;
 		if(gesture.state() == State.STATE_STOP) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+			testje(currX);
+			pickARandomLed();
+		} else if(gesture.state() == State.STATE_UPDATE) {
+			testje(currX);
+=======
+=======
+>>>>>>> origin/master
+=======
+>>>>>>> origin/master
+>>>>>>> a
 			//testje(currX);
 			pickARandomLed();
 		} else if(gesture.state() == State.STATE_UPDATE) {
 			//testje(currX);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> origin/master
+=======
+>>>>>>> origin/master
+=======
+>>>>>>> origin/master
+>>>>>>> a
 			pickARandomLed();
 		} else if(gesture.state() == State.STATE_START) {
 			
