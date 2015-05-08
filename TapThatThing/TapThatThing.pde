@@ -1,3 +1,4 @@
+import processing.serial.*;
 import com.onformative.leap.*;
 import com.leapmotion.leap.*;
 import com.leapmotion.leap.Gesture.*;	// state en type
@@ -8,25 +9,37 @@ ControlP5 cp5;
 LeapMotionP5 leap;
 PVector fingerPosition;
 
+Serial serialPort;  // Seriële poort
+String val;         // Waarde seriële poort
+boolean connected = false;
+
 // Rectangles -> LED segments
-Button r1;
-Button r2;
-Button r3;
-Button r4;
-Button r5;
-Button r6;
+Button [] s = new Button[6];		// segments
 
 // Finger
 Button finger;
 
 // Random nummer elke x aantal milliseconden (1s = 1000ms)
 int curTime;
-int wait = 5000;
+float wait = 5000;
 int ran = 0;
 
 //Score en levens bijhouden
 int score = 0;
 int lifes = 5;
+boolean inTime = false;
+
+int buttonStartPosY = 580;
+
+boolean started = false;
+
+// No windows
+void init() {
+  frame.removeNotify();
+  frame.setUndecorated(true);
+  frame.addNotify();
+  super.init();
+}
 
 
 void setup() {
@@ -39,230 +52,192 @@ void setup() {
 
 	cp5 = new ControlP5(this);
 
-	r1 = cp5.addButton("Led segment 1")
-	.setValue(0)
-	.setPosition(200,200)
-	.setSize(100,200)
-	.setColorBackground(color(255, 0, 0))
-	.setColorLabel(color(255, 0, 0));
-	//.isPressed(false);
+	int i = 0;
+	for(; i < s.length; i++) {
+		s[i] = cp5.addButton("s" + i)			// segment 1
+		.setValue(0)
+		.setPosition(235 + (i * 270), buttonStartPosY)
+		.setSize(100,200)
+		.setColorBackground(color(255, 255, 255))
+		.setVisible(false)
+		.setLabelVisible(false);
+	}
 
-	r2 = cp5.addButton("Led segment 2")
-	.setValue(0)
-	.setPosition(500,200)
-	.setSize(100,200)
-	.setColorBackground(color(255, 0, 0))
-	.setColorLabel(color(255, 0, 0));
-	//.isPressed(false);
 
-	r3 = cp5.addButton("Led segment 3")
+	finger = cp5.addButton("f")
 	.setValue(0)
-	.setPosition(800,200)
-	.setSize(100,200)
-	.setColorBackground(color(255, 0, 0))
-	.setColorLabel(color(255, 0, 0));
-	//.isPressed(false);
-
-	r4 = cp5.addButton("Led segment 4")
-	.setValue(0)
-	.setPosition(1100,200)
-	.setSize(100,200)
-	.setColorBackground(color(255, 0, 0))
-	.setColorLabel(color(255, 0, 0));
-	//.isPressed(false);
-
-	r5 = cp5.addButton("Led segment 5")
-	.setValue(0)
-	.setPosition(1400,200)
-	.setSize(100,200)
-	.setColorBackground(color(255, 0, 0))
-	.setColorLabel(color(255, 0, 0));
-	//.isPressed(false);
-
-	r6 = cp5.addButton("Led segment 6")
-	.setValue(0)
-	.setPosition(1700,200)
-	.setSize(100,200)
-	.setColorBackground(color(255, 0, 0))
-	.setColorLabel(color(255, 0, 0));
-	//.isPressed(false);
-
-	finger = cp5.addButton("finger")
-	.setValue(0)
-	.setPosition(width * 0.5, width * 0.5)
 	.setSize(20,20)
-	.setColorBackground(color(0, 0, 0));
+	.setPosition(100, 100)
+	.setColorBackground(color(0, 0, 0))
+	.setLabelVisible(false);
 
 	// Font globaal instellen
 	textFont(createFont("Verdana", 40));
 	fill(0);
+	stroke(0);
+
+	  // Hier zou dropdown moeten komen om juiste poort te selecteren
+	  String portName = Serial.list()[1];
+
+	  // Maak connectie -> 115200 = vies snel
+	  serialPort = new Serial(this, portName, 115200);
+
+	  // Lees totdat '#' wordt gezien
+	  serialPort.bufferUntil('#'); 
 }
 
 void draw() {
-	background(#AAAAAA);
 	fingerPosition = leap.getTip(leap.getFinger(0));
 	finger.setPosition(fingerPosition.x, fingerPosition.y);
 
-	// Score en levens bijhouden, moet in draw omdat die hertekend wordt.
-	text("Lifes: " + lifes, 100, 100);
-	text("Score: " + score, 1400, 100);
+	if(started) {
+		background(#AAAAAA);
+
+
+		if(millis() - curTime >= wait){
+			if(!inTime) {
+				lifes--;
+			}
+			pickARandomLed();
+		}
+		inTime = false;
+
+		text("Score: " + score, 1400, 100);
+		text("Lifes: " + lifes, 100, 100);
+	} else {
+		background(#454545);
+
+	}
 }
 
 void pickARandomLed(){
-	if(millis() - curTime >= wait){
-		ran = int(random(1, 7));
-    	//println(ran); //if it is, do something
-    	curTime = millis();
-
-    	switch(ran) {
-    		case 1: 
-    		//println("case1");  // Does not execute
-    		resetAllLeds();
-    		r1.setColorBackground(color(0, 255, 0));
-    		checkTappedButton(ran);    
-    		break;
-
-    		case 2: 
-		    //println("case2");  // Does not execute
-		    resetAllLeds();
-		    r2.setColorBackground(color(0, 255, 0));
-		    checkTappedButton(ran);    	
-		    break;
-
-		    case 3:
-		    //println("case3");  // Does not execute
-		    resetAllLeds();
-		    r3.setColorBackground(color(0, 255, 0));
-		    checkTappedButton(ran);      
-		    break;
-
-		    case 4: 
-		    //println("case4");  // Does not execute
-		    resetAllLeds();
-		    r4.setColorBackground(color(0, 255, 0));
-		    checkTappedButton(ran);    	
-		    break;
-
-		    case 5:
-		    //println("case5");  // Does not execute
-		    resetAllLeds();
-		    r5.setColorBackground(color(0, 255, 0));
-		    checkTappedButton(ran);     
-		    break;
-
-		    case 6: 
-		    //println("case6");  // Does not execute
-		    resetAllLeds();
-		    r6.setColorBackground(color(0, 255, 0));
-		    checkTappedButton(ran);  	
-		    break;
-		    default :
-		    	ran = 3;
-		    break;	
-		}
-	}
+	resetLed();
+	sedLEDRGB(ran, 255, 255, 255);
+	ran = int(random(0, s.length));
+	curTime = millis();
+	s[ran].setColorBackground(color(0, 255, 0));
+	sedLEDRGB(ran, 0, 255, 0);
+	wait = random(1800, 4500);
 }
 
-void resetAllLeds(){
-	r1.setColorBackground(color(255, 0, 0));
-	r2.setColorBackground(color(255, 0, 0));
-	r3.setColorBackground(color(255, 0, 0));
-	r4.setColorBackground(color(255, 0, 0));
-	r5.setColorBackground(color(255, 0, 0));
-	r6.setColorBackground(color(255, 0, 0));
-}
-
-void checkTappedButton(int ran){
-	/*if(r1.isPressed == true || r2.isPressed == true || r3.isPressed == true || r4.isPressed == true || r5.isPressed == true || r6.isPressed == true){		
-		println("Er werd een button ingedrukt");
-	}
-	else{
-		println("Er werd NIETS ingedrukt");
-	}*/
-	switch(ran) {
-    		case 1: 
-    		    pickARandomLed();
-    		    score++;
-    		break;
-
-    		case 2: 
-		      	pickARandomLed();
-    		    score++;
-		    break;
-
-		    case 3:
-		       	pickARandomLed();
-    		    score++;
-		    break;
-
-		    case 4: 
-		       	pickARandomLed();
-    		    score++;
-		    break;
-
-		    case 5:
-		        pickARandomLed();
-    		    score++; 
-		    break;
-
-		    case 6: 
-		    	pickARandomLed();
-    		    score++;
-		    break;
-		    default :
-		    	lifes--;
-		    break;	
-		}
+void resetLed(){
+	s[ran].setColorBackground(color(255, 255, 255));
 }
 
 public void screenTapGestureRecognized(ScreenTapGesture gesture) {
-	println("screenTapGestureRecognized");
+	//println("screenTapGestureRecognized");
 	// 3 states
 	// 1 -> herkennen gesturen
 	// 2 -> gesture is bezig, update
 	// 3 -> gesture stopt
 
-	float currY = finger.getPosition().y;
-	if(currY >= 200 && currY <= 400) {
+	if(!started) {
+		started = true;
+		int i = 0;
+		for(; i < s.length; i++) {
+			s[i].setVisible(true);
+			ledsWit();
+		}
+		pickARandomLed();
+	}
 
+	float currY = finger.getPosition().y;
+	if(currY >= buttonStartPosY && currY <= (buttonStartPosY + 200)) {
 		float currX = finger.getPosition().x;
 		if(gesture.state() == State.STATE_STOP) {
-			checkButton(currX);
-			pickARandomLed();
-
+			checkWin(currX);
 		} else if(gesture.state() == State.STATE_UPDATE) {
-			checkButton(currX);
-			//checkButton(currX);			
-			pickARandomLed();
-
-		} else if(gesture.state() == State.STATE_UPDATE) {
-			//checkButton(currX);
-			pickARandomLed();
-
-		} else if(gesture.state() == State.STATE_START) {
-			
+			checkWin(currX);			
 		}
 	}
 }
 
-public void checkButton(float x) {
-	if(x >= 200 && x <= 300) {
-		println("eerste button aangeklikt.");
-		r1.setColorBackground(color(255, 255, 255));
-	} else if(x >= 500 && x <= 600) {
-		println("tweede button aangeklikt.");
-		r2.setColorBackground(color(255, 255, 255));
-	} else if(x >= 800 && x <= 900){
-		println("derde button aangeklikt.");
-		r3.setColorBackground(color(255, 255, 255));
-	} else if(x >= 1100 && x <= 1200){
-		println("vierde button aangeklikt.");
-		r4.setColorBackground(color(255, 255, 255));
-	} else if(x >= 1400 && x <= 1500){
-		println("vijfde button aangeklikt.");
-		r5.setColorBackground(color(255, 255, 255));
-	} else if(x >= 1700 && x <= 1800){
-		println("zesde button aangeklikt.");
-		r6.setColorBackground(color(255, 255, 255));
+public void ledsWit() {
+	serialPort.write("w");
+}
+
+public void sedLEDRGB(int l, int r, int g, int b) {
+	serialPort.write("r");
+    serialPort.write(l);
+    serialPort.write(r);
+    serialPort.write(g);
+    serialPort.write(b);
+}
+
+
+public void checkWin(float x) {
+	int clicked = -1;
+
+	if(x >= 235 && x <= 335) {
+		clicked = 0;
+		//println("eerste button aangeklikt.");
+		//s[0].setColorBackground(color(255, 255, 255));
+	} else if(x >= 505 && x <= 605) {
+		clicked = 1;
+		//println("tweede button aangeklikt.");
+		//s[1].setColorBackground(color(255, 255, 255));
+	} else if(x >= 775 && x <= 875){
+		clicked = 2;
+		//println("derde button aangeklikt.");
+		//s[2].setColorBackground(color(255, 255, 255));
+	} else if(x >= 1045 && x <= 1145){
+		clicked = 3;
+		//println("vierde button aangeklikt.");
+		//s[3].setColorBackground(color(255, 255, 255));
+	} else if(x >= 1315 && x <= 1415){
+		clicked = 4;
+		//println("vijfde button aangeklikt.");
+		//s[4].setColorBackground(color(255, 255, 255));
+	} else if(x >= 1585 && x <= 1685){
+		clicked = 5;
+		//println("zesde button aangeklikt.");
+		//s[5].setColorBackground(color(255, 255, 255));
 	}
+
+	if(clicked == ran) {
+		s[ran].setColorBackground(color(0, 0, 255));
+		sedLEDRGB(ran, 0, 0, 255);
+		delay(150);
+		s[ran].setColorBackground(color(255, 255, 255));
+		sedLEDRGB(ran, 255, 255, 255);
+		delay(150);
+		s[ran].setColorBackground(color(0, 0, 255));
+		sedLEDRGB(ran, 0, 0, 255);
+		score++;
+		inTime = true;
+		pickARandomLed();
+	} else if(clicked >= 0) {
+		s[clicked].setColorBackground(color(255, 0, 0));
+		sedLEDRGB(clicked, 255, 0, 0);
+		delay(150);
+		s[clicked].setColorBackground(color(255, 255, 255));
+		sedLEDRGB(clicked, 255, 255, 255);
+		lifes--;
+		inTime = true;
+		pickARandomLed();
+	}
+}
+
+// Handel seriële communicatie af
+void serialEvent(Serial myPort) {
+  val = serialPort.readStringUntil('#');
+
+
+  if (val != null) {
+    val = trim(val.replaceAll("#", ""));
+
+    // Wachten op connectie...
+    if(connected == false) {
+      if(val.equals("Connect me")) {
+        serialPort.clear();
+        serialPort.write("Connected!");
+        println("Connected!");
+        connected = true;
+        delay(100);
+      }
+    } else {
+      // Connectie klaar
+      println(val);
+    }
+  }
 }

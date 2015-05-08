@@ -21,7 +21,8 @@ void setup() {
   size(200, 200);
 
   // Hier zou dropdown moeten komen om juiste poort te selecteren
-  String portName = Serial.list()[1];
+  println(Serial.list());
+  String portName = Serial.list()[2];
 
   // Maak connectie -> 115200 = vies snel
   serialPort = new Serial(this, portName, 115200);
@@ -36,7 +37,11 @@ void draw() {
 
 public void controlEvent(ControlEvent theEvent) {
   if(theEvent.controller().id() == 1) {
-    serialPort.write("f");
+    serialPort.write("r");
+    serialPort.write(3);
+    serialPort.write(255);
+    serialPort.write(0);
+    serialPort.write(0);
   }
 }
 
