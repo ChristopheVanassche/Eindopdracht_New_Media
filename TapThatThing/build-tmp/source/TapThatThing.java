@@ -112,16 +112,9 @@ public void draw() {
 	fingerPosition = leap.getTip(leap.getFinger(0));
 	finger.setPosition(fingerPosition.x, fingerPosition.y);
 
-<<<<<<< HEAD
 	if(started) {
 		background(0xffAAAAAA);
 
-=======
-	// Score en levens bijhouden, moet in draw omdat die hertekend wordt.
-	text("Lifes: " + lifes, 100, 100);
-	text("Score: " + score, 1400, 100);
-}
->>>>>>> d8d1c7757bdcb831f6898ebe058977ac853f74f7
 
 		if(millis() - curTime >= wait){
 			if(!inTime) {
@@ -174,31 +167,13 @@ public void screenTapGestureRecognized(ScreenTapGesture gesture) {
 	if(currY >= buttonStartPosY && currY <= (buttonStartPosY + 200)) {
 		float currX = finger.getPosition().x;
 		if(gesture.state() == State.STATE_STOP) {
-<<<<<<< HEAD
 			checkWin(currX);
 		} else if(gesture.state() == State.STATE_UPDATE) {
 			checkWin(currX);			
-=======
-			checkButton(currX);
-			pickARandomLed();
-
-		} else if(gesture.state() == State.STATE_UPDATE) {
-			checkButton(currX);
-			//checkButton(currX);			
-			pickARandomLed();
-
-		} else if(gesture.state() == State.STATE_UPDATE) {
-			//checkButton(currX);
-			pickARandomLed();
-
-		} else if(gesture.state() == State.STATE_START) {
-			
->>>>>>> d8d1c7757bdcb831f6898ebe058977ac853f74f7
 		}
 	}
 }
 
-<<<<<<< HEAD
 public void ledsWit() {
 	serialPort.write("w");
 }
@@ -262,27 +237,6 @@ public void checkWin(float x) {
 		lifes--;
 		inTime = true;
 		pickARandomLed();
-=======
-public void checkButton(float x) {
-	if(x >= 200 && x <= 300) {
-		println("eerste button aangeklikt.");
-		r1.setColorBackground(color(255, 255, 255));
-	} else if(x >= 500 && x <= 600) {
-		println("tweede button aangeklikt.");
-		r2.setColorBackground(color(255, 255, 255));
-	} else if(x >= 800 && x <= 900){
-		println("derde button aangeklikt.");
-		r3.setColorBackground(color(255, 255, 255));
-	} else if(x >= 1100 && x <= 1200){
-		println("vierde button aangeklikt.");
-		r4.setColorBackground(color(255, 255, 255));
-	} else if(x >= 1400 && x <= 1500){
-		println("vijfde button aangeklikt.");
-		r5.setColorBackground(color(255, 255, 255));
-	} else if(x >= 1700 && x <= 1800){
-		println("zesde button aangeklikt.");
-		r6.setColorBackground(color(255, 255, 255));
->>>>>>> d8d1c7757bdcb831f6898ebe058977ac853f74f7
 	}
 }
 
@@ -309,6 +263,7 @@ public void serialEvent(Serial myPort) {
     }
   }
 }
+//done
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "TapThatThing" };
     if (passedArgs != null) {
