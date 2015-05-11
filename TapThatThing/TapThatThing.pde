@@ -24,10 +24,11 @@ int curTime;
 float wait = 5000;
 int ran = 0;
 
-//Score en levens bijhouden
+//Score en levens bijhouden + background
 int score = 0;
 int lifes = 5;
 boolean inTime = false;
+PImage bg;
 
 int buttonStartPosY = 580;
 
@@ -44,6 +45,8 @@ void init() {
 
 void setup() {
 	size(1920, 1080, P2D);
+	bg = loadImage("TapThatThingMonsters.png");
+	background(bg);
 	leap = new LeapMotionP5(this);						// leap motion device
 	leap.enableGesture(Type.TYPE_SCREEN_TAP);
 
@@ -58,7 +61,7 @@ void setup() {
 		.setValue(0)
 		.setPosition(235 + (i * 270), buttonStartPosY)
 		.setSize(100,200)
-		.setColorBackground(color(255, 255, 255))
+		//.setColorBackground(color(255, 255, 255))
 		.setVisible(false)
 		.setLabelVisible(false);
 	}
