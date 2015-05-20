@@ -46,7 +46,7 @@ void init() {
 void setup() {
 	size(1920, 1080, P2D);
 	bg = loadImage("TapThatThingMonsters.png");
-	background(bg);
+	
 	leap = new LeapMotionP5(this);						// leap motion device
 	leap.enableGesture(Type.TYPE_SCREEN_TAP);
 
@@ -61,7 +61,7 @@ void setup() {
 		.setValue(0)
 		.setPosition(235 + (i * 270), buttonStartPosY)
 		.setSize(100,200)
-		//.setColorBackground(color(255, 255, 255))
+		.setColorBackground(color(255, 255, 255, 130))
 		.setVisible(false)
 		.setLabelVisible(false);
 	}
@@ -76,8 +76,8 @@ void setup() {
 
 	// Font globaal instellen
 	textFont(createFont("Verdana", 40));
-	fill(0);
-	stroke(0);
+	fill(color(255, 255, 255));
+	stroke(color(255, 255, 255));
 
 	  // Hier zou dropdown moeten komen om juiste poort te selecteren
 	  String portName = Serial.list()[1];
@@ -94,9 +94,7 @@ void draw() {
 	finger.setPosition(fingerPosition.x, fingerPosition.y);
 
 	if(started) {
-		background(#AAAAAA);
-
-
+		background(bg);
 		if(millis() - curTime >= wait){
 			if(!inTime) {
 				lifes--;
@@ -109,7 +107,7 @@ void draw() {
 		text("Lifes: " + lifes, 100, 100);
 	} else {
 		background(#454545);
-
+		text("Tap to start!", 820, 522);
 	}
 }
 
@@ -118,13 +116,13 @@ void pickARandomLed(){
 	sedLEDRGB(ran, 255, 255, 255);
 	ran = int(random(0, s.length));
 	curTime = millis();
-	s[ran].setColorBackground(color(0, 255, 0));
+	s[ran].setColorBackground(color(0, 255, 0, 130));
 	sedLEDRGB(ran, 0, 255, 0);
 	wait = random(1800, 4500);
 }
 
 void resetLed(){
-	s[ran].setColorBackground(color(255, 255, 255));
+	s[ran].setColorBackground(color(255, 255, 255, 130));
 }
 
 public void screenTapGestureRecognized(ScreenTapGesture gesture) {
